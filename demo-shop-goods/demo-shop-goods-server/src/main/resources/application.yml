@@ -1,0 +1,12 @@
+server:
+  port: 38000
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+  mapper-locations: classpath*:com/talkweb/**/sql/*Mapper.xml
+
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: localhost:8080

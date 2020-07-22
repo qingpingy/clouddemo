@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.talkweb.demo.shop.category.dao.GoodsMapper">
+  <resultMap id="BaseResultMap" type="com.talkweb.demo.shop.category.pojo.GoodsBean">
+  	<id column="goods_id" property="goods_id" jdbcType="VARCHAR" />
+  	<result column="goods_id" property="goods_id" jdbcType="VARCHAR" />
+  	<result column="goods_name" property="goods_name" jdbcType="VARCHAR" />
+  	<result column="price" property="price" jdbcType="INTEGER" />
+  	<result column="flag" property="flag" jdbcType="VARCHAR" />
+  	<result column="brand" property="brand" jdbcType="VARCHAR" />
+  	<result column="goods_desc" property="goods_desc" jdbcType="VARCHAR" />
+  	<result column="create_time" property="create_time" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+  	s.goods_id, s.goods_name, s.price, s.flag, s.brand, s.goods_desc,
+s.create_time
+  </sql>
+  
+  <insert id="insertSelective" parameterType="com.talkweb.demo.shop.category.pojo.GoodsBean">
+    insert into shop_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="goods_id != null" > goods_id, </if>
+      <if test="goods_name != null" > goods_name, </if>
+      <if test="price != null" > price, </if>
+      <if test="flag != null" > flag, </if>
+      <if test="brand != null" > brand, </if>
+      <if test="goods_desc != null" > goods_desc, </if>
+      <if test="create_time != null" > create_time, </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="goods_id != null" > #{goods_id,jdbcType=VARCHAR}, </if>
+      <if test="goods_name != null" > #{goods_name,jdbcType=VARCHAR}, </if>
+      <if test="price != null" > #{price,jdbcType=INTEGER}, </if>
+      <if test="flag != null" > #{flag,jdbcType=VARCHAR}, </if>
+      <if test="brand != null" > #{brand,jdbcType=VARCHAR}, </if>
+      <if test="goods_desc != null" > #{goods_desc,jdbcType=VARCHAR}, </if>
+      <if test="create_time != null" > #{create_time,jdbcType=TIMESTAMP}, </if>
+    </trim>
+  </insert>
+  
+  <update id="updateSelective" parameterType="com.talkweb.demo.shop.category.pojo.GoodsBean">
+    update shop_goods 
+    <set>
+      <if test="goods_id != null" > goods_id = #{goods_id,jdbcType=VARCHAR}, </if>
+      <if test="goods_name != null" > goods_name = #{goods_name,jdbcType=VARCHAR}, </if>
+      <if test="price != null" > price = #{price,jdbcType=INTEGER}, </if>
+      <if test="flag != null" > flag = #{flag,jdbcType=VARCHAR}, </if>
+      <if test="brand != null" > brand = #{brand,jdbcType=VARCHAR}, </if>
+      <if test="goods_desc != null" > goods_desc = #{goods_desc,jdbcType=VARCHAR}, </if>
+      <if test="create_time != null" > create_time = #{create_time,jdbcType=TIMESTAMP}, </if>
+    </set>
+    where goods_id = #{goods_id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 如果有数据状态字段，删除方法请更改为update语句，做逻辑删除 -->
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from shop_goods
+    where goods_id in
+    <foreach collection="array" open="(" separator="," close=")" item="item">
+     #{item}
+    </foreach>
+  </delete>
+  
+  <!-- 查询条件 模糊查询用concat函数 ：name like concat('%',#{bean.name,jdbcType=VARCHAR},'%') -->
+  <select id="pageList" resultMap="BaseResultMap" parameterType="pageBean">
+    select 
+    <include refid="Base_Column_List" />
+    from shop_goods s
+    <where>
+  		<if test="bean.goods_name != null and bean.goods_name != '' "> and s.goods_name = #{bean.goods_name,jdbcType=VARCHAR} </if>
+  		<if test="bean.goods_desc != null and bean.goods_desc != '' "> and s.goods_desc = #{bean.goods_desc,jdbcType=VARCHAR} </if>
+  	</where>
+  </select>
+  
+  <select id="list" resultMap="BaseResultMap" parameterType="com.talkweb.demo.shop.category.pojo.GoodsBean" >
+    select 
+    <include refid="Base_Column_List" />
+    from shop_goods s
+  </select>
+  
+  <select id="get" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from shop_goods s
+    where s.goods_id = #{goods_id,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

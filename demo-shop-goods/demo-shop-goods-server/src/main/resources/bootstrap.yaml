@@ -1,0 +1,57 @@
+spring:
+  # 选择加载不同环境的配置文件
+  profiles:
+    active: dev
+  application:
+    name: goods-server
+
+---
+#开发环境配置
+spring:
+  profiles: dev,local
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 8105746d-7b63-46c6-9fee-4839c363f5ea
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 8105746d-7b63-46c6-9fee-4839c363f5ea
+        active-profiles: ${spring.profiles.active:dev}
+        fileExtension: yml
+        shared-dataids: db-mysql.yml,shop-goods.yml
+        refreshable-dataids: db-mysql.yml,shop-goods.yml
+
+---
+##测试环境配置
+spring:
+  profiles: test
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: 559d7cb0-8ef1-4393-b28f-41843b0106ae
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 559d7cb0-8ef1-4393-b28f-41843b0106ae
+        active-profiles: ${spring.profiles.active:test}
+        fileExtension: yml
+        shared-dataids: db-mysql.yml,shop-goods.yml
+        refreshable-dataids: db-mysql.yml,shop-goods.yml
+
+---
+##测试环境配置
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_HOST:10.159.170.89}:${NACOS_PORT:8848}
+        namespace: ${NAMESPACE:559d7cb0-8ef1-4393-b28f-41843b0106ae}
+      config:
+        server-addr: ${NACOS_HOST:10.159.170.89}:${NACOS_PORT:8848}
+        namespace: ${NAMESPACE:559d7cb0-8ef1-4393-b28f-41843b0106ae}
+        active-profiles: ${spring.profiles.active:prod}
+        fileExtension: yml
+        shared-dataids: db-mysql.yml,shop-goods.yml
+        refreshable-dataids: db-mysql.yml,shop-goods.yml
